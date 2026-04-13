@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "praktyki.Controllers.VerifyPeselController",
+    "Method": "Verify",
+    "RelativePath": "api/VerifyPesel/{Number}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Number",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "praktyki.VerifyPeselResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
