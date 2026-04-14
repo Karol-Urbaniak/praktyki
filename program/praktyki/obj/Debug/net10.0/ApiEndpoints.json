@@ -1,0 +1,49 @@
+[
+  {
+    "ContainingType": "praktyki.Controllers.VerifyPeselController",
+    "Method": "Verify",
+    "RelativePath": "api/VerifyPesel/{peselInput}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "peselInput",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "praktyki.Models.VerifyPeselResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "praktyki_vies.Controllers.VerifyViesController",
+    "Method": "GetViesData",
+    "RelativePath": "api/VerifyVies/{countryCode}/vat/{taxId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "countryCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "taxId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
