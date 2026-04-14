@@ -89,11 +89,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\praktyki.csproj",
+      "projectUniqueName": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\praktyki.csproj",
       "projectName": "praktyki",
-      "projectPath": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\praktyki.csproj",
+      "projectPath": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\praktyki.csproj",
       "packagesPath": "C:\\Users\\Praktykant\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\obj\\",
+      "outputPath": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

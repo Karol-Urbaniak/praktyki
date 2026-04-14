@@ -1,17 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\",
+  "WorkspaceRootPath": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|c:\\users\\praktykant\\desktop\\praktyki-dotnet\\praktyki\\praktyki\\praktyki.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "AbsoluteMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|c:\\users\\praktykant\\desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\praktyki.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|solutionrelative:praktyki\\praktyki.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|c:\\users\\praktykant\\desktop\\praktyki-dotnet\\praktyki\\praktyki\\controllers\\verifypeselcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|c:\\users\\praktykant\\desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\controllers\\verifypeselcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|solutionrelative:praktyki\\controllers\\verifypeselcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|c:\\users\\praktykant\\desktop\\praktyki-dotnet\\praktyki\\praktyki\\verifypesel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|c:\\users\\praktykant\\desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\verifypesel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E811DB7C-6226-29D3-EC68-2719D86A29DA}|praktyki\\praktyki.csproj|solutionrelative:praktyki\\verifypesel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -28,9 +28,9 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "praktyki.http",
-              "DocumentMoniker": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\praktyki.http",
+              "DocumentMoniker": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\praktyki.http",
               "RelativeDocumentMoniker": "praktyki\\praktyki.http",
-              "ToolTip": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\praktyki.http",
+              "ToolTip": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\praktyki.http",
               "RelativeToolTip": "praktyki\\praktyki.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
@@ -41,9 +41,9 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "VerifyPeselController.cs",
-              "DocumentMoniker": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\Controllers\\VerifyPeselController.cs",
+              "DocumentMoniker": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\Controllers\\VerifyPeselController.cs",
               "RelativeDocumentMoniker": "praktyki\\Controllers\\VerifyPeselController.cs",
-              "ToolTip": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\Controllers\\VerifyPeselController.cs",
+              "ToolTip": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\Controllers\\VerifyPeselController.cs",
               "RelativeToolTip": "praktyki\\Controllers\\VerifyPeselController.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAQwEIAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -53,9 +53,9 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "VerifyPesel.cs",
-              "DocumentMoniker": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\VerifyPesel.cs",
+              "DocumentMoniker": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\VerifyPesel.cs",
               "RelativeDocumentMoniker": "praktyki\\VerifyPesel.cs",
-              "ToolTip": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki\\praktyki\\VerifyPesel.cs",
+              "ToolTip": "C:\\Users\\Praktykant\\Desktop\\praktyki-dotnet\\praktyki-pesel\\praktyki\\VerifyPesel.cs",
               "RelativeToolTip": "praktyki\\VerifyPesel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
