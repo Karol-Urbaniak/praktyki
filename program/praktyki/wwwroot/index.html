@@ -3,79 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <title>VIES Verify</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<style>
-    :root {
-        --primary: #0078d4;
-        --success: #28a745;
-        --danger: #dc3545;
-        --bg: #f4f7f9;
-    }
-    h2 {
-        color: #333;
-        margin-top: 0;
-        text-align: center;
-        font-size: 1.5rem;
-    }
-
-
-    input {
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-        outline: none;
-        transition: border-color 0.2s;
-    }
-
-        input:focus {
-            border-color: var(--primary);
-        }
-
-    button {
-        background-color: var(--primary);
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-        button:hover {
-            background-color: #005a9e;
-        }
-
-    .result-box {
-        margin-top: 20px;
-        padding: 15px;
-        border-radius: 4px;
-        background-color: #fafafa;
-        border-left: 5px solid var(--primary);
-        display: none;
-    }
-
-        .result-box p {
-            margin: 8px 0;
-            color: #555;
-        }
-
-    #outStatus {
-        font-weight: bold;
-        padding: 2px 6px;
-        border-radius: 3px;
-    }
-
-    .status-active {
-        color: var(--success);
-    }
-
-    .status-inactive {
-        color: var(--danger);
-    }
-</style>
 <body>
     <h2>Weryfikacja NIP (VIES)</h2>
     <div id="main">

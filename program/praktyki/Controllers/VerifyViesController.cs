@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using praktyki.Models;
 namespace praktyki_vies.Controllers
 {
     [ApiController]

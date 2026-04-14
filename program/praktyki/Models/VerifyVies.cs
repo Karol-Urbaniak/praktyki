@@ -2,12 +2,12 @@
 {
     public class VerifyVies
     {
-        public bool isValid { get; set; }
-        public string name { get; set; }
-        public string address { get; set; }
-        public string originalVatNumber { get; set; }
-        public string vatNumber { get; set; }
-        public string userError { get; set; }
+        public bool IsValid { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string OriginalVatNumber { get; set; }
+        public string VatNumber { get; set; }
+        public string UserError { get; set; }
     }
 
 }
