@@ -18,10 +18,10 @@ namespace praktyki.Models
         public string? Pesel { get; set; }
 
         [Column("firstname")]
-        public string? firstname { get; set; } // Mała litera
+        public string? firstname { get; set; }
 
         [Column("lastname")]
-        public string? lastname { get; set; }  // Mała litera
+        public string? lastname { get; set; }
 
         [Column("name")]
         public string name { get; set; } = string.Empty;

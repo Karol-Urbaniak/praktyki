@@ -196,5 +196,5 @@ C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\bin\Debug\net10.0\t
 C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\obj\Debug\net10.0\compressed\yarasd558i-{0}-p9fwn53cg0-p9fwn53cg0.gz
-C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\obj\Debug\net10.0\compressed\amxd783jbw-{0}-wnj582i4cp-wnj582i4cp.gz
 C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\obj\Debug\net10.0\compressed\y9iv966rcr-{0}-zukjog421d-zukjog421d.gz
+C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\obj\Debug\net10.0\compressed\amxd783jbw-{0}-t1wflqhxl2-t1wflqhxl2.gz

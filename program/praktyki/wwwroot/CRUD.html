@@ -32,6 +32,8 @@
                 <th>NIP</th>
                 <th>Kraj</th>
                 <th id="actions">Akcje</th>
+                <th>Weryfikacja</th>
+                <th></th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -46,21 +48,34 @@
                 const tbody = document.querySelector('#clientsTable tbody');
                 tbody.innerHTML = '';
 
+ 
+
                 clients.forEach(client => {
+                    let verifyHtml = '';
+
+                    if (client.firstname && client.country === 'PL') {
+                        verifyHtml = `<button onclick="handleVerifyPesel('${client.pesel}', ${client.id})">Weryfikuj PESEL</button>`;
+                    }
+                    else if (!client.firstname || client.country !== 'PL') {
+                        verifyHtml = `<button onclick="handleVerifyVies('${client.nip}', '${client.country}', ${client.id})">Weryfikuj VIES</button>`;
+                    }
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                            <td>${client.id}</td>
-                            <td>${client.name}</td>
-                            <td>${client.firstname || '-'}</td>
-                            <td>${client.lastname || '-'}</td>
-                            <td>${client.pesel || '-'}</td>
-                            <td>${client.nip || '-'}</td>
-                            <td>${client.country || '-'}</td>
-                            <td>
-                                <button onclick='prepareEdit(${JSON.stringify(client)})'>Edytuj</button>
-                                <button onclick='deleteClient(${client.id})'>Usuń</button>
-                            </td>`;
-                    tbody.appendChild(row);
+                    <td>${client.id}</td>
+                    <td>${client.name}</td>
+                    <td>${client.firstname || '-'}</td>
+                    <td>${client.lastname || '-'}</td>
+                    <td>${client.pesel || '-'}</td>
+                    <td>${client.nip || '-'}</td>
+                    <td>${client.country || '-'}</td>
+                    <td>
+                        <button onclick='prepareEdit(${JSON.stringify(client)})'>Edytuj</button>
+                        <button onclick='deleteClient(${client.id})'>Usuń</button>
+                    </td>
+                    <td>${verifyHtml}</td>
+                    <td id="status-${client.id}">-</td>`;
+                            tbody.appendChild(row);
                 });
             } catch (error) {
                 console.error("Błąd podczas ładowania:", error);
@@ -126,6 +141,50 @@
                 loadClients();
         }
 
+        async function handleVerifyPesel(pesel, clientId) {
+            if (!pesel || pesel === 'null') return alert("Brak numeru PESEL!");
+
+            const statusCell = document.getElementById(`status-${clientId}`);
+            statusCell.innerText = "Sprawdzam...";
+
+            try {
+                const response = await fetch(`/api/VerifyPesel/${pesel}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusCell.innerHTML = data.isValid ? "Poprawny" : "Błędny";
+                    if (data.isValid) alert(`PESEL poprawny: ${data.message || ''}`);
+                } else {
+                    statusCell.innerText = "Błąd";
+                    alert(data.message || "Błąd weryfikacji");
+                }
+            } catch (error) {
+                statusCell.innerText = "Błąd API";
+                console.error(error);
+            }
+        }
+
+        async function handleVerifyVies(nip, country, clientId) {
+            if (!nip || !country) return alert("Brak NIP lub kodu kraju!");
+
+            const statusCell = document.getElementById(`status-${clientId}`);
+            statusCell.innerText = "VIES...";
+
+            try {
+                const response = await fetch(`/api/VerifyVies/${country}/vat/${nip}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    statusCell.innerHTML = data.isValid ? "Aktywny" : "Nieaktywny";
+                } else {
+                    statusCell.innerText = "Błąd";
+                    alert("Serwis VIES nie mógł zweryfikować tego numeru.");
+                }
+            } catch (error) {
+                statusCell.innerText = "Błąd sieci";
+                console.error(error);
+            }
+        }
         loadClients();
     </script>
 </body>
