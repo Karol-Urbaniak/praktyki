@@ -1,6 +1,0 @@
-wwwroot\index.html
-wwwroot\style.css
-wwwroot\CRUD.html
-C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\wwwroot\index.html
-C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\wwwroot\style.css
-C:\Users\Praktykant\Desktop\praktyki-dotnet\program\praktyki\wwwroot\CRUD.html
