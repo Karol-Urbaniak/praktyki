@@ -1,2 +1,0 @@
-wwwroot\index.html
-C:\Users\Praktykant\Desktop\praktyki-dotnet\praktyki-vies\praktyki-vies\wwwroot\index.html
