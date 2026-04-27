@@ -1,38 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using praktyki.Models;
+using praktyki.Services;
 namespace praktyki_vies.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class VerifyViesController : ControllerBase
     {
-        private readonly HttpClient _httpClient;
+        private readonly ViesService _viesService;
 
         
-        public VerifyViesController(HttpClient httpClient)
+        public VerifyViesController(ViesService viesService)
         {
-            _httpClient = httpClient;
+            _viesService = viesService;
         }
 
         [HttpGet("{countryCode}/vat/{taxId}")]
         public async Task<IActionResult> GetViesData(string countryCode, string taxId)
         {
-            var url = $"https://ec.europa.eu/taxation_customs/vies/rest-api/ms/{countryCode}/vat/{taxId}";
+            var result = await _viesService.GetViesDataAsync(countryCode, taxId);
 
-            try
-            {
-                var result = await _httpClient.GetFromJsonAsync<VerifyVies>(url);
-
-                if (result == null)
-                    return NotFound("Serwis VIES nie zwrócił danych.");
-
-                // Zwracamy cały obiekt do Twojego GUI / Curla
+                if (result == null) return NotFound("Serwis VIES nie zwrócił danych.");
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Błąd komunikacji: {ex.Message}");
-            }
+
         }
 
     }

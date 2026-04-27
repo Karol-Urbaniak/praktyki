@@ -2,7 +2,7 @@
 {
     public class VerifyVies
     {
-        public bool IsValid { get; set; }
+        public bool isValid { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string OriginalVatNumber { get; set; }

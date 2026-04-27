@@ -18,15 +18,15 @@ namespace praktyki.Models
         public string? Pesel { get; set; }
 
         [Column("firstname")]
-        public string? firstname { get; set; }
+        public string? Firstname { get; set; }
 
         [Column("lastname")]
-        public string? lastname { get; set; }
+        public string? Lastname { get; set; }
 
         [Column("name")]
-        public string name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        [Column("country")]
-        public string? country { get; set; }
+        [Column("country_code")]
+        public string? CountryCode { get; set; }
     }
 }

@@ -30,6 +30,10 @@ namespace praktyki.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CountryCode")
+                        .HasColumnType("text")
+                        .HasColumnName("country_code");
+
                     b.Property<bool>("IsCompany")
                         .HasColumnType("boolean")
                         .HasColumnName("is_company");
@@ -41,10 +45,6 @@ namespace praktyki.Migrations
                     b.Property<string>("Pesel")
                         .HasColumnType("text")
                         .HasColumnName("pesel");
-
-                    b.Property<string>("country")
-                        .HasColumnType("text")
-                        .HasColumnName("country");
 
                     b.Property<string>("firstname")
                         .HasColumnType("text")
