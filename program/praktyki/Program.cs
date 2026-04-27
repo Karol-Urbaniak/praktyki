@@ -16,6 +16,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddHttpClient<praktyki.Services.ViesService>();
+builder.Services.AddHttpClient<WeatherService>();
 
 var app = builder.Build();
 

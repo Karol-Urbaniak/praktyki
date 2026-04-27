@@ -28,5 +28,8 @@ namespace praktyki.Models
 
         [Column("country_code")]
         public string? CountryCode { get; set; }
+
+        [Column("city")]
+        public string? City { get; set; }
     }
 }
