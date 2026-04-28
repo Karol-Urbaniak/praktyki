@@ -15,11 +15,20 @@
         <input type="text" id="nip" placeholder="NIP">
         <input type="text" id="pesel" placeholder="PESEL">
         <input type="text" id="country" placeholder="Kraj">
-        <input type="text" id="city" placeholder="Miasto" />
 
         <button type="submit" id="submitBtn">Dodaj do bazy</button>
         <button type="button" id="cancelBtn" style="display:none;" onclick="resetForm()">Anuluj edycję</button>
     </form>
+
+    <div id="addressFormContainer" style="display:none; border: 1px solid #ccc; padding: 15px; margin-top: 20px; background: #f0f0f0;">
+        <h3>Dodaj adres dla: <span id="targetClientName"></span></h3>
+        <input type="hidden" id="targetClientId">
+        <input type="text" id="newStreet" placeholder="Ulica">
+        <input type="text" id="newCity" placeholder="Miasto" required>
+        <label><input type="checkbox" id="newIsMain"> Czy główny?</label>
+        <button onclick="saveNewAddress()">Zapisz adres</button>
+        <button onclick="document.getElementById('addressFormContainer').style.display='none'">Anuluj</button>
+    </div>
 
     <h2>Lista Klientów</h2>
     <table id="clientsTable">
@@ -32,10 +41,9 @@
                 <th>PESEL</th>
                 <th>NIP</th>
                 <th>Kraj</th>
-                <th>Miasto</th>
+                <th>Adresy</th>
                 <th id="actions">Akcje</th>
                 <th>Weryfikacja</th>
-                <th>Pogoda</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -52,39 +60,97 @@
 
                 clients.forEach(client => {
                     let verifyHtml = '';
+
+                    const mainAddress = client.addresses?.find(a => a.isMain) || client.addresses?.[0];
+                    const hasAddresses = client.addresses && client.addresses.length > 0;
+                    let weatherHtml = mainAddress
+                        ? `<button onclick="handleCheckWeather('${mainAddress.city}', ${client.id})">Pogoda</button>`
+                        : '-';
+
+
                     if (client.firstname && client.countryCode === 'PL') {
                         verifyHtml = `<button onclick="handleVerifyPesel('${client.pesel}', ${client.id})">Weryfikuj PESEL</button>`;
                     } else if (!client.firstname || client.countryCode !== 'PL') {
                         verifyHtml = `<button onclick="handleVerifyVies('${client.nip}', '${client.countryCode}', ${client.id})">Weryfikuj VIES</button>`;
                     }
 
-                    let weatherHtml = client.city
-                        ? `<button onclick="handleCheckWeather('${client.city}', ${client.id})">Sprawdź pogodę</button>`
-                        : '-';
-
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                            <td>${client.id}</td>
-                            <td>${client.name}</td>
-                            <td>${client.firstname || '-'}</td>
-                            <td>${client.lastname || '-'}</td>
-                            <td>${client.pesel || '-'}</td>
-                            <td>${client.nip || '-'}</td>
-                            <td>${client.countryCode || '-'}</td>
-                            <td>${client.city || '-'}</td>
-                            <td>
-                                <button onclick='prepareEdit(${JSON.stringify(client)})'>Edytuj</button>
-                                <button onclick='deleteClient(${client.id})'>Usuń</button>
-                            </td>
-                            <td>${verifyHtml}</td>
-                            <td>${weatherHtml}</td>
-                            <td id="status-${client.id}">-</td>`;
+                                    <td>${client.id}</td>
+                                    <td>${client.name}</td>
+                                    <td>${client.firstname || '-'}</td>
+                                    <td>${client.lastname || '-'}</td>
+                                    <td>${client.pesel || '-'}</td>
+                                    <td>${client.nip || '-'}</td>
+                                    <td>${client.countryCode || '-'}</td>
+                                    <td><b>${hasAddresses ? `Liczba adresów: ${client.addresses.length}` : 'Brak adresów'}</b></td>
+                                    <td>
+                                        <button onclick='prepareEdit(${JSON.stringify(client)})'>Edytuj</button>
+                                        <button onclick='deleteClient(${client.id})'>Usuń</button>
+                                    </td>
+                                    <td>${verifyHtml || '-'}</td>
+                                    <td id="status-${client.id}">-</td>`;
                     tbody.appendChild(row);
+
+                    const detailRow = document.createElement('tr');
+                    detailRow.innerHTML = `
+                                <td colspan="13" style="padding-left: 50px; background: #fafafa;">
+                                    <table style="width: 100%; border: 1px solid #ddd;">
+                                        ${client.addresses.map(addr => `
+                                            <tr>
+                                                <td>${addr.street || '-'}</td>
+                                                <td>${addr.city}</td>
+                                                <td>${addr.isMain ? 'Główny' : 'Dodatkowy'}</td>
+                                                <td>
+                                                   <button onclick='editAddress(${JSON.stringify(addr).replace(/'/g, "&apos;")})'>Edytuj</button>
+                                                    <button onclick="deleteAddress(${addr.id})">Usuń</button>
+                                                </td>
+                                                <td><button onclick="handleCheckWeather('${addr.city}', ${addr.id})">Sprawdź pogodę</button></td>
+                                                <td id="weather-addr-${addr.id}">-</td>
+                                                </tr>
+                                        `).join('')}
+                                        <tr style="background: #e7f3ff;">
+                                            <td colspan="6" style="text-align: center; padding: 5px;">
+                                                <button onclick="prepareAddAddress(${client.id}, '${client.name}')"><b>+ Dodaj nowy adres</b></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>`;
+                    tbody.appendChild(detailRow);
                 });
             } catch (error) {
                 console.error("Błąd podczas ładowania:", error);
             }
         }
+
+        function openAddressForm(clientId, clientName) {
+            document.getElementById('addressFormContainer').style.display = 'block';
+            document.getElementById('targetClientId').value = clientId;
+            document.getElementById('targetClientName').innerText = clientName;
+        }
+
+        async function saveNewAddress() {
+            const clientId = document.getElementById('targetClientId').value;
+            const addressData = {
+                ClientId: parseInt(clientId),
+                Street: document.getElementById('newStreet').value,
+                City: document.getElementById('newCity').value,
+                IsMain: document.getElementById('newIsMain').checked
+            }
+
+            const response = await fetch(`/api/Clients/${clientId}/addresses`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(addressData)
+            });
+
+            if (response.ok) {
+                document.getElementById('addressFormContainer').style.display = 'none';
+                loadClients();
+            } else {
+                alert("Błąd podczas dodawania adresu.");
+            }
+        };
 
         document.getElementById('AddClientForm').addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -99,8 +165,8 @@
                 Nip: nipValue || null,
                 Pesel: document.getElementById('pesel').value || null,
                 CountryCode: document.getElementById('country').value || null,
-                City: document.getElementById('city').value || null,
-                IsCompany: nipValue.trim().length > 0
+                IsCompany: nipValue.trim().length > 0,
+                Addresses: []
             };
 
             const method = id ? 'PUT' : 'POST';
@@ -117,6 +183,7 @@
         });
 
         function prepareEdit(client) {
+            document.getElementById('addressFormContainer').style.display = 'none';
             document.getElementById('clientId').value = client.id;
             document.getElementById('name').value = client.name;
             document.getElementById('firstname').value = client.firstname || '';
@@ -124,10 +191,82 @@
             document.getElementById('nip').value = client.nip || '';
             document.getElementById('pesel').value = client.pesel || '';
             document.getElementById('country').value = client.countryCode || '';
-            document.getElementById('city').value = client.city || '';
 
             document.getElementById('submitBtn').innerText = "Zaktualizuj dane";
             document.getElementById('cancelBtn').style.display = "inline";
+        }
+
+
+        function prepareAddAddress(clientId, clientName) {
+            closeAddressForm();
+            document.getElementById('addressFormContainer').style.display = 'block';
+            document.getElementById('targetClientId').value = clientId;
+            document.getElementById('targetClientName').innerText = clientName;
+
+            const saveBtn = document.querySelector("#addressFormContainer button[onclick*='saveNewAddress'], #addressFormContainer button[onclick*='updateAddress']");
+            saveBtn.setAttribute("onclick", "saveNewAddress()");
+            saveBtn.innerText = "Zapisz adres";
+        }
+        function editAddress(addr) {
+            document.getElementById('addressFormContainer').style.display = 'block';
+
+            document.getElementById('targetClientId').value = addr.clientId;
+            document.getElementById('targetClientName').innerText = "Edycja adresu ID: " + addr.id;
+
+            document.getElementById('newStreet').value = addr.street || '';
+            document.getElementById('newCity').value = addr.city;
+            document.getElementById('newIsMain').checked = addr.isMain;
+
+            const saveBtn = document.querySelector("#addressFormContainer button[onclick='saveNewAddress()']");
+            saveBtn.setAttribute("onclick", `updateAddress(${addr.id})`);
+            saveBtn.innerText = "Zaktualizuj adres";
+        }
+
+        async function updateAddress(addressId) {
+            const clientId = document.getElementById('targetClientId').value;
+            const addressData = {
+                Id: addressId,
+                ClientId: parseInt(clientId),
+                Street: document.getElementById('newStreet').value,
+                City: document.getElementById('newCity').value,
+                IsMain: document.getElementById('newIsMain').checked
+            };
+
+            const response = await fetch(`/api/Clients/addresses/${addressId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(addressData)
+            });
+
+            if (response.ok) {
+                closeAddressForm();
+                loadClients();
+            } else {
+                alert("Błąd podczas aktualizacji adresu.");
+            }
+        }
+
+        async function deleteAddress(addressId) {
+            const response = await fetch(`/api/Clients/addresses/${addressId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                loadClients();
+            } else {
+                alert("Błąd podczas usuwania adresu.");
+            }
+        }
+
+        function closeAddressForm() {
+            document.getElementById('addressFormContainer').style.display = 'none';
+            document.getElementById('newStreet').value = '';
+            document.getElementById('newCity').value = '';
+            document.getElementById('newIsMain').checked = false;
+
+            const saveBtn = document.querySelector("#addressFormContainer button[onclick^='updateAddress'], #addressFormContainer button[onclick='saveNewAddress()']");
+            saveBtn.setAttribute("onclick", "saveNewAddress()");
+            saveBtn.innerText = "Zapisz adres";
         }
 
         function resetForm() {
@@ -170,19 +309,19 @@
             } catch (error) { console.error(error); }
         }
 
-        async function handleCheckWeather(city, clientId) {
+        async function handleCheckWeather(city, addrId) {
             if (!city) return alert("Brak nazwy miasta!");
-            const statusCell = document.getElementById(`status-${clientId}`);
+            const statusCell = document.getElementById(`weather-addr-${addrId}`)
             statusCell.innerText = "Ładuję...";
             try {
                 const response = await fetch(`/api/CheckWeather/${city}`);
                 if (response.ok) {
                     const data = await response.json();
                     statusCell.innerHTML = `
-                            <img src="https:${data.current.condition.icon}" width="30" title="${data.current.condition.text}">
-                            <b>${data.current.temp_c}°C</b><br>
-                            <small>${data.current.condition.text}</small>
-                        `;
+                                    <img src="https:${data.current.condition.icon}" width="30" title="${data.current.condition.text}">
+                                    <b>${data.current.temp_c}°C</b><br>
+                                    <small>${data.current.condition.text}</small>
+                                `;
                 } else {
                     statusCell.innerText = "Błąd API";
                 }

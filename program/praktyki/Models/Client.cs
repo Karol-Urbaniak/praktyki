@@ -29,7 +29,6 @@ namespace praktyki.Models
         [Column("country_code")]
         public string? CountryCode { get; set; }
 
-        [Column("city")]
-        public string? City { get; set; }
+        public ICollection<ClientAddress> Addresses { get; set; } = new List<ClientAddress>();
     }
 }

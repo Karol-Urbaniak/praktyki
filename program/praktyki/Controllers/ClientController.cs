@@ -44,6 +44,22 @@ namespace praktyki.Controllers
             return NoContent();
         }
 
+        [HttpPost("{id}/addresses")]
+        public async Task<IActionResult> AddAddress(int id, ClientAddress address)
+        {
+            if (id != address.ClientId) return BadRequest("Niezgodność ID klienta.");
+
+            try
+            {
+                await _clientService.AddAddressAsync(id, address);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Błąd serwera: {ex.Message}");
+            }
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClient(int id, Client client)
         {
@@ -56,6 +72,21 @@ namespace praktyki.Controllers
                 return BadRequest("Niepoprawnie dobrane ID");
             }
 
+            return NoContent();
+        }
+
+        [HttpPut("addresses/{addressId}")]
+        public async Task<IActionResult> UpdateAddress(int addressId, ClientAddress address)
+        {
+            if (addressId != address.Id) return BadRequest("Niezgodność ID adresu");
+            await _clientService.UpdateAddressAsync(address);
+            return NoContent();
+        }
+
+        [HttpDelete("addresses/{addressId}")]
+        public async Task<IActionResult> DeleteAddress(int addressId)
+        {
+            await _clientService.DeleteAddressAsync(addressId);
             return NoContent();
         }
     }
