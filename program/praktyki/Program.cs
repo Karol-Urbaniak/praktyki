@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using praktyki.Commands;
 using praktyki.Data;
+using praktyki.Models;
 using praktyki.Repositories;
 using praktyki.Services;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,15 +18,21 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
-builder.Services.AddHttpClient<praktyki.Services.ViesService>();
+builder.Services.AddScoped<VerifyPeselCommand>();
+builder.Services.AddScoped<VerifyPeselService>();
+builder.Services.AddHttpClient<ViesService>();
 builder.Services.AddHttpClient<WeatherService>();
+builder.Services.Configure<praktyki.Models.WeatherSettings>(builder.Configuration.GetSection("WeatherSettings"));
+
+
 
 var app = builder.Build();
+
+if (app.HandleConsoleCommand(args)) return;
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
