@@ -9,9 +9,9 @@
     <h2>Weryfikacja NIP (VIES)</h2>
     <div id="main">
         <div>
-            <input type="text" id="countryInput" placeholder="Kraj (np. PL)">
-            <input type="text" id="nipInput" placeholder="NIP">
-            <button onclick="sprawdzNip()">Sprawdź</button>
+            <input type="text" id="countryInput" placeholder="Kraj (np. PL)" required>
+            <input type="text" id="nipInput" placeholder="NIP" required>
+            <button onclick="handleVerifyVies()">Sprawdź</button>
         </div>
         <div id="result" class="result-box" display="none">
             <p><strong>Firma:</strong> <span id="outName"></span></p>
@@ -19,7 +19,8 @@
             <p><strong>Status:</strong> <span id="outStatus"></span></p>
         </div>
     </div>
-    <script>async function sprawdzNip() {
+    <script>
+        async function sprawdzNip() {
             const country = document.getElementById('countryInput').value;
             const nip = document.getElementById('nipInput').value;
 
@@ -30,6 +31,25 @@
             document.getElementById('outName').innerText = data.name;
             document.getElementById('outAddress').innerText = data.address;
             document.getElementById('outStatus').innerText = data.isValid ? "AKTYWNY" : "NIEAKTYWNY";
-        }</script>
+        }
+
+        async function handleVerifyVies() {
+            const country = document.getElementById('countryInput').value;
+            const nip = document.getElementById('nipInput').value;
+
+            if (!nip || !country) return alert("Brak NIP lub kodu kraju!");
+            const statusCell = document.getElementById(`result`);
+            try {
+                const response = await fetch(`/api/VerifyVies/${country}/vat/${nip}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('outName').innerText = data.name;
+                    document.getElementById('outAddress').innerText = data.address;
+                    document.getElementById('outStatus').innerText = data.isValid ? "AKTYWNY" : "NIEAKTYWNY";
+                } else { statusCell.innerText = "Błąd"; }
+            } catch (error) { console.error(error); }
+        }
+    </script>
 </body>
 </html>

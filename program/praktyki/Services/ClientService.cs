@@ -40,5 +40,20 @@ namespace praktyki.Services
         {
             await _repository.DeleteAsync(id);
         }
+
+        public async Task AddAddressAsync(int clientId, ClientAddress address)
+        {
+            await _repository.AddAddressAsync(clientId, address);
+        }
+
+        public async Task UpdateAddressAsync(ClientAddress address)
+        {
+            await _repository.UpdateAddressAsync(address);
+        }
+
+        public async Task DeleteAddressAsync(int addressId)
+        {
+            await _repository.DeleteAddressAsync(addressId);
+        }
     }
 }

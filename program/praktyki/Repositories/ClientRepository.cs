@@ -16,12 +16,16 @@ namespace praktyki.Repositories
 
         public async Task<IEnumerable<Client>> GetAllAsync()
         {
-            return await _context.Clients.ToListAsync();
+            return await _context.Clients
+            .Include(c => c.Addresses)    
+            .ToListAsync();
         }
 
         public async Task<Client?> GetByIdAsync(int id)
         {
-            return await _context.Clients.FindAsync(id);
+            return await _context.Clients
+            .Include(c => c.Addresses)
+            .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task AddAsync(Client client)
@@ -49,6 +53,28 @@ namespace praktyki.Repositories
         public async Task<bool> ExistsAsync(int id)
         {
             return await _context.Clients.AnyAsync(e => e.Id == id);
+        }
+
+        public async Task AddAddressAsync(int clientId, ClientAddress address)
+        {
+            _context.ClientAddresses.Add(address);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAddressAsync(ClientAddress address)
+        {
+            _context.Entry(address).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAddressAsync(int addressId)
+        {
+            var address = await _context.ClientAddresses.FindAsync(addressId);
+            if (address != null)
+            {
+                _context.ClientAddresses.Remove(address);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

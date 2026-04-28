@@ -9,5 +9,8 @@ namespace praktyki.Services
         Task CreateClientAsync(Client client);
         Task UpdateClientAsync(int id, Client client);
         Task DeleteClientAsync(int id);
+        Task AddAddressAsync(int clientId, ClientAddress address);
+        Task UpdateAddressAsync(ClientAddress address);
+        Task DeleteAddressAsync(int addressId);
     }
 }
