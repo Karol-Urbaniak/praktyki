@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel CRUD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Dodaj / Edytuj Klienta</h2>
+    <form id="AddClientForm">
+        <input type="hidden" id="clientId" value="">
+
+        <input type="text" id="name" placeholder="Nazwa" required>
+        <input type="text" id="firstname" placeholder="Imię">
+        <input type="text" id="lastname" placeholder="Nazwisko">
+        <input type="text" id="nip" placeholder="NIP">
+        <input type="text" id="pesel" placeholder="PESEL">
+        <input type="text" id="country" placeholder="Kraj">
+        <input type="text" id="city" placeholder="Miasto" />
+
+        <button type="submit" id="submitBtn">Dodaj do bazy</button>
+        <button type="button" id="cancelBtn" style="display:none;" onclick="resetForm()">Anuluj edycję</button>
+    </form>
+
+    <h2>Lista Klientów</h2>
+    <table id="clientsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>PESEL</th>
+                <th>NIP</th>
+                <th>Kraj</th>
+                <th>Miasto</th>
+                <th id="actions">Akcje</th>
+                <th>Weryfikacja</th>
+                <th>Pogoda</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function loadClients() {
+            try {
+                const response = await fetch('/api/Clients');
+                const clients = await response.json();
+                const tbody = document.querySelector('#clientsTable tbody');
+                tbody.innerHTML = '';
+
+                clients.forEach(client => {
+                    let verifyHtml = '';
+                    if (client.firstname && client.countryCode === 'PL') {
+                        verifyHtml = `<button onclick="handleVerifyPesel('${client.pesel}', ${client.id})">Weryfikuj PESEL</button>`;
+                    } else if (!client.firstname || client.countryCode !== 'PL') {
+                        verifyHtml = `<button onclick="handleVerifyVies('${client.nip}', '${client.countryCode}', ${client.id})">Weryfikuj VIES</button>`;
+                    }
+
+                    let weatherHtml = client.city
+                        ? `<button onclick="handleCheckWeather('${client.city}', ${client.id})">Sprawdź pogodę</button>`
+                        : '-';
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                            <td>${client.id}</td>
+                            <td>${client.name}</td>
+                            <td>${client.firstname || '-'}</td>
+                            <td>${client.lastname || '-'}</td>
+                            <td>${client.pesel || '-'}</td>
+                            <td>${client.nip || '-'}</td>
+                            <td>${client.countryCode || '-'}</td>
+                            <td>${client.city || '-'}</td>
+                            <td>
+                                <button onclick='prepareEdit(${JSON.stringify(client)})'>Edytuj</button>
+                                <button onclick='deleteClient(${client.id})'>Usuń</button>
+                            </td>
+                            <td>${verifyHtml}</td>
+                            <td>${weatherHtml}</td>
+                            <td id="status-${client.id}">-</td>`;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Błąd podczas ładowania:", error);
+            }
+        }
+
+        document.getElementById('AddClientForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('clientId').value;
+            const nipValue = document.getElementById('nip').value;
+
+            const clientData = {
+                Id: parseInt(id) || 0,
+                Name: document.getElementById('name').value,
+                Firstname: document.getElementById('firstname').value,
+                Lastname: document.getElementById('lastname').value,
+                Nip: nipValue || null,
+                Pesel: document.getElementById('pesel').value || null,
+                CountryCode: document.getElementById('country').value || null,
+                City: document.getElementById('city').value || null,
+                IsCompany: nipValue.trim().length > 0
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `/api/Clients/${id}` : '/api/Clients';
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(clientData)
+            });
+
+            resetForm();
+            loadClients();
+        });
+
+        function prepareEdit(client) {
+            document.getElementById('clientId').value = client.id;
+            document.getElementById('name').value = client.name;
+            document.getElementById('firstname').value = client.firstname || '';
+            document.getElementById('lastname').value = client.lastname || '';
+            document.getElementById('nip').value = client.nip || '';
+            document.getElementById('pesel').value = client.pesel || '';
+            document.getElementById('country').value = client.countryCode || '';
+            document.getElementById('city').value = client.city || '';
+
+            document.getElementById('submitBtn').innerText = "Zaktualizuj dane";
+            document.getElementById('cancelBtn').style.display = "inline";
+        }
+
+        function resetForm() {
+            document.getElementById('AddClientForm').reset();
+            document.getElementById('clientId').value = "";
+            document.getElementById('submitBtn').innerText = "Dodaj do bazy";
+            document.getElementById('cancelBtn').style.display = "none";
+        }
+
+        async function deleteClient(id) {
+            await fetch(`/api/Clients/${id}`, { method: 'DELETE' });
+            loadClients();
+        }
+
+        async function handleVerifyPesel(pesel, clientId) {
+            if (!pesel || pesel === 'null') return alert("Brak numeru PESEL!");
+            const statusCell = document.getElementById(`status-${clientId}`);
+            statusCell.innerText = "Sprawdzam...";
+            try {
+                const response = await fetch(`/api/VerifyPesel/${pesel}`);
+                const data = await response.json();
+                if (response.ok) {
+                    statusCell.innerHTML = data.isValid ? "Poprawny" : "Błędny";
+                } else {
+                    statusCell.innerText = "Błąd";
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function handleVerifyVies(nip, country, clientId) {
+            if (!nip || !country) return alert("Brak NIP lub kodu kraju!");
+            const statusCell = document.getElementById(`status-${clientId}`);
+            statusCell.innerText = "VIES...";
+            try {
+                const response = await fetch(`/api/VerifyVies/${country}/vat/${nip}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    statusCell.innerHTML = data.isValid ? "Aktywny" : "Nieaktywny";
+                } else { statusCell.innerText = "Błąd"; }
+            } catch (error) { console.error(error); }
+        }
+
+        async function handleCheckWeather(city, clientId) {
+            if (!city) return alert("Brak nazwy miasta!");
+            const statusCell = document.getElementById(`status-${clientId}`);
+            statusCell.innerText = "Ładuję...";
+            try {
+                const response = await fetch(`/api/CheckWeather/${city}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    statusCell.innerHTML = `
+                            <img src="https:${data.current.condition.icon}" width="30" title="${data.current.condition.text}">
+                            <b>${data.current.temp_c}°C</b><br>
+                            <small>${data.current.condition.text}</small>
+                        `;
+                } else {
+                    statusCell.innerText = "Błąd API";
+                }
+            } catch (error) {
+                statusCell.innerText = "Błąd sieci";
+                console.error(error);
+            }
+        }
+        loadClients();
+    </script>
+</body>
+</html>
